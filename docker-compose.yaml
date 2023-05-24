@@ -1,0 +1,17 @@
+version: '3.5'
+
+services:
+
+  task-backend-service:
+    environment:
+        - GOOGLE_APPLICATION_CREDENTIALS=keys/key.json
+    build:
+      context: ./task-backend-service
+      args:
+        env_file: local.env
+    command: flask run --host 0.0.0.0 --port 9098
+    ports:
+      - "9098:9098"
+      
+
+    

@@ -1,0 +1,7 @@
+Flask==2.2.2
+python-dotenv
+pymongo[srv]==4.2.*
+flasgger==0.9.5
+prometheus-flask-exporter
+requests
+jsonschema
