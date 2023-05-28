@@ -9,7 +9,7 @@ import {MessageOutlined} from '@ant-design/icons'
 
 
 
-const ChatPopup = ({messages, onSendMessage, unreadMsgCount=0}) => {
+const ChatPopup = ({messages, onSendMessage, sender, unreadMsgCount=0}) => {
     
     const [chatOpen, setChatOpen] = useState(false)
 
@@ -22,9 +22,9 @@ const ChatPopup = ({messages, onSendMessage, unreadMsgCount=0}) => {
             <PopupWindow
                 open={chatOpen}
                 onClose={() => {setChatOpen(false)}}
-                title={'Chat'}
+                title={`Chat`}
             >
-                <ChatArea messages={messages} onSendMessage={onSendMessage}/>
+                <ChatArea messages={messages} sender={sender} onSendMessage={onSendMessage}/>
             </PopupWindow>
         </>
     )

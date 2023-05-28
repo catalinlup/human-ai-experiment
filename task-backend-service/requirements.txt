@@ -5,3 +5,5 @@ flasgger==0.9.5
 prometheus-flask-exporter
 requests
 jsonschema
+google-cloud-firestore
+flask-socketio

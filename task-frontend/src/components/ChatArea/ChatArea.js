@@ -4,7 +4,7 @@ import ChatTextInput from '../ChatTextInput/ChatTextInput';
 
 
 
-const ChatArea = ({messages, onSendMessage }) => {
+const ChatArea = ({messages, sender, onSendMessage}) => {
   
   const [currentText, setCurrentText] = useState(null)
 
@@ -26,7 +26,14 @@ const ChatArea = ({messages, onSendMessage }) => {
         <div style={{'position': 'absolute', bottom: 10, width: '100%'}}>
             <div style={{'width': '80%', margin: 'auto', backgroundColor: 'white'}}>
                 <ChatTextInput 
-                    onSendMessage={onSendMessage}
+                    onSendMessage={() => {
+                        if (!currentText) {
+                            return;
+                        }
+
+                        onSendMessage({sender: sender, message: currentText, messageSent: true, timestamp: new Date().getTime()})
+                        setCurrentText(null)
+                    }}
                     onChange={(e) => setCurrentText(e.target.value)}
                     value={currentText}
                 />

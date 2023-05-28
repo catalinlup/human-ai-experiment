@@ -8,7 +8,7 @@ const ChatBubble = ({ sender, message, timestamp, messageSent=true}) => {
     <div className={bubbleClass}>
       <div className="sender">{sender}</div>
       <div className="message">{message}</div>
-      <div className="timestamp">{timestamp}</div>
+      <div className="timestamp">{new Date(timestamp).toUTCString()}</div>
     </div>
   );
 };

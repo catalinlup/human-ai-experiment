@@ -5,6 +5,7 @@ import ChatList from './components/ChatList/ChatList';
 import PopupWindow from './components/PopupWindow/PopupWindow';
 import ChatArea from './components/ChatArea/ChatArea';
 import ChatPopup from './components/ChatPopup/ChatPopup';
+import { useState } from 'react';
 
 function App() {
   const messages = [
@@ -76,6 +77,10 @@ function App() {
     },
     // Add more messages as needed
   ];
+
+  const [currentMessages, setCurrentMessages] = useState(messages)
+
+
   return (
     <div style={{overflow: 'hidden', height: '100vh', width: '100vw'}}>
     {/* <h1>Chat Example</h1> */}
@@ -89,7 +94,8 @@ function App() {
          <ChatArea messages={messages} onSendMessage={(m) => console.log(m)}/>
       </PopupWindow> */}
       <ChatPopup 
-        messages={messages} onSendMessage={(m) => console.log(m)}
+        sender={'Catalin'}
+        messages={currentMessages} onSendMessage={(m) => setCurrentMessages(old => [...old, m])}
         unreadMsgCount={3}
       />
   </div>
