@@ -8,4 +8,37 @@ module.exports = function(app) {
       changeOrigin: true,
     })
   );
+
+  app.use(
+    "/task/*",
+    createProxyMiddleware({
+      target: "http://localhost:9098",
+      changeOrigin: true
+    })
+  );
+
+  app.use(
+    "/chat/*",
+    createProxyMiddleware({
+      target: "http://localhost:9098",
+      changeOrigin: true
+    })
+  );
+
+  app.use(
+    "/session/*",
+    createProxyMiddleware({
+      target: "http://localhost:9098",
+      changeOrigin: true
+    })
+  );
+
+
+  app.use(
+    "/socket.io/*",
+    createProxyMiddleware({
+      target: "http://localhost:9098",
+      changeOrigin: true
+    })
+  )
 };

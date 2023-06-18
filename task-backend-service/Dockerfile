@@ -14,4 +14,4 @@ EXPOSE 9098
 
 WORKDIR src
 
-CMD ["sh", "-c", "flask run --host 0.0.0.0 --port $PORT"]
+CMD ["sh", "-c", "python main.py"]

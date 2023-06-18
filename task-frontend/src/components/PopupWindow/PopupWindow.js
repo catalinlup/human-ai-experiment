@@ -23,6 +23,7 @@ const PopupWindow = ({open, onClose, title, children}) => {
     if (!targetRect) {
       return;
     }
+    // console.log(uiData)
     setBounds({
       left: -targetRect.left + uiData.x,
       right: clientWidth - (targetRect.right - uiData.x),
@@ -42,7 +43,7 @@ const PopupWindow = ({open, onClose, title, children}) => {
             bounds={bounds}
             onStart={(event, uiData) => onStart(event, uiData)}
         >
-        <ResizableBox  style={{position: 'relative'}} handle={<div className="modal-resize"></div>}  width={windowWidth} height={windowHeight}  minConstraints={[400, 300]} maxConstraints={[800, 600]}>
+        <ResizableBox  style={{position: 'absolute', left: 'calc(100% - 400px)', top: 'calc(100% - 500px)'}} handle={<div className="modal-resize"></div>}  width={windowWidth} height={windowHeight}  minConstraints={[400, 300]} maxConstraints={[800, 600]}>
             <div 
                 className="modal-content"
                 ref={draggleRef} 

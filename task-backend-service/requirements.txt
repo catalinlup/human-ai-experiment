@@ -7,3 +7,5 @@ requests
 jsonschema
 google-cloud-firestore
 flask-socketio
+simple-websocket
+flask-cors

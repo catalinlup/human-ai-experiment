@@ -1,7 +1,7 @@
 
 from google.cloud import firestore
-from ..entities.Message import Message
-from ..config_params import *
+from entities.Message import Message
+from config_params import *
 
 def save_message(client: firestore.Client, message: Message, task_id: str):
     """

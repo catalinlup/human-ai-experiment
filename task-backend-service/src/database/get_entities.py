@@ -1,8 +1,8 @@
 
 from typing import List
 from google.cloud import firestore
-from ..entities.Message import Message
-from ..config_params import *
+from entities.Message import Message
+from config_params import *
 
 def get_messages(client: firestore.Client, task_id: str) -> List[Message]:
     """

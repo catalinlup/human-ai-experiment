@@ -9,7 +9,7 @@ services:
       context: ./task-backend-service
       args:
         env_file: local.env
-    command: flask run --host 0.0.0.0 --port 9098
+    # command: python main.py
     ports:
       - "9098:9098"
       

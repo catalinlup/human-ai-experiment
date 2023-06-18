@@ -22,7 +22,7 @@ const ChatList = ({ messages }) => {
         <ChatBubble
           key={index}
           sender={message.sender}
-          message={message.message}
+          message={message.content}
           timestamp={message.timestamp}
           messageSent={message.messageSent}
         />

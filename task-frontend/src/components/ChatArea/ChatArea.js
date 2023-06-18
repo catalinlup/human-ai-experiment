@@ -8,6 +8,10 @@ const ChatArea = ({messages, sender, onSendMessage}) => {
   
   const [currentText, setCurrentText] = useState(null)
 
+  console.log('Chat area messages', messages)
+
+  const augmentedMessages = messages.map(m => {return {...m, messageSent: m.sender === sender}})
+
   return (<>
         <div
             style={{
@@ -16,11 +20,11 @@ const ChatArea = ({messages, sender, onSendMessage}) => {
                 top: 80,
                 overflow: 'scroll',
                 width: '90%',
-                left: '5%'
+                left: '5%',
             }}
         >
             <ChatList 
-                messages={messages}
+                messages={augmentedMessages}
             />
         </div>
         <div style={{'position': 'absolute', bottom: 10, width: '100%'}}>
@@ -31,7 +35,7 @@ const ChatArea = ({messages, sender, onSendMessage}) => {
                             return;
                         }
 
-                        onSendMessage({sender: sender, message: currentText, messageSent: true, timestamp: new Date().getTime()})
+                        onSendMessage({sender: sender, content: currentText, messageSent: true, timestamp: new Date().getTime()})
                         setCurrentText(null)
                     }}
                     onChange={(e) => setCurrentText(e.target.value)}

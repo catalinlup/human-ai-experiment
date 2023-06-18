@@ -1,0 +1,60 @@
+import { useState } from "react"
+import './RouteVotingArea.css'
+import { Button, Card, Divider, Select, Typography, notification } from 'antd';
+
+const { Paragraph, Text } = Typography;
+
+
+
+const RouteVotingArea = ({onVoteSubmitted, routeCount, recommendedRoute, alreadyVoted=false, showRecommendation=true}) => {
+
+    const [selectedRoute, setSelectedRoute] = useState(0)
+    const [api, contextHolder] = notification.useNotification();
+
+    const routeOptions = []
+    for (let i = 0; i < routeCount; i += 1) {
+        routeOptions.push({value: i, label: `Route ${i}`})
+    }
+
+    return (
+        <>
+         {contextHolder}
+        <Card className="sticky-title" title="Route Voting" style={{ height: '300px', overflow: 'auto' }}>
+            <Select
+                disabled={alreadyVoted}
+                value={selectedRoute}
+                style={{ width: 400 }}
+                options={routeOptions}
+                onChange={(r) => setSelectedRoute(r)}
+            />
+            <Divider />
+            <Button 
+                disabled={alreadyVoted} 
+                size={'lg'} 
+                style={{width: '100%'}} 
+                type="primary"
+                onClick={() => {
+                    onVoteSubmitted(selectedRoute)
+                    api.success({'description': `Vote registered! Voted for Route ${selectedRoute}.`})
+
+                }}
+            >
+                    Vote
+            </Button>
+            <Divider />
+            <div style={{textAlign: 'center'}}>
+                {showRecommendation&&
+                    <Text keyboard level={2}>{`AI recommends route ${recommendedRoute}.`}</Text>
+                }
+
+                {!showRecommendation&&
+                    <Text keyboard level={2}>{`No AI recommendation yet.`}</Text>
+                }
+
+            </div>
+        </Card>
+        </>
+    ) 
+}
+
+export default RouteVotingArea;
