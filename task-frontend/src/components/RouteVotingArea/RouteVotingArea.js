@@ -13,7 +13,7 @@ const RouteVotingArea = ({onVoteSubmitted, routeCount, recommendedRoute, already
 
     const routeOptions = []
     for (let i = 0; i < routeCount; i += 1) {
-        routeOptions.push({value: i, label: `Route ${i}`})
+        routeOptions.push({value: i, label: `Route ${i + 1}`})
     }
 
     return (
@@ -44,7 +44,7 @@ const RouteVotingArea = ({onVoteSubmitted, routeCount, recommendedRoute, already
             <Divider />
             <div style={{textAlign: 'center'}}>
                 {showRecommendation&&
-                    <Text keyboard level={2}>{`AI recommends route ${recommendedRoute}.`}</Text>
+                    <Text keyboard level={2}>{`AI recommends route ${recommendedRoute + 1}.`}</Text>
                 }
 
                 {!showRecommendation&&

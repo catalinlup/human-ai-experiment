@@ -6,6 +6,8 @@ const RoomStateController = ({roomData, session_id, prolific_id}) => {
 
     const {data: roomStatus, isLoading: isRoomStatusLoading} = useGetRoomStatusQuery(roomData.room_id, {pollingInterval: 5000})
 
+    
+
     if (isRoomStatusLoading) {
         return <LoadingSpinner />
     }

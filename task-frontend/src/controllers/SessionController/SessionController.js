@@ -22,25 +22,39 @@ const SessionController = ({session_id, prolific_id, roomData, taskId}) => {
 
     return (
         <>
-        <div style={{overflow: 'hidden', height: '100vh', width: '100vw'}}>
-          {taskId}
-          {display}
-          <RouteSelector taskId={taskId}/>
-          <Space direction={'horizontal'}>
-            <div style={{width: '100%'}}>
-              
-              <RouteVotingController taskId={taskId} session_id={session_id} prolific_id={prolific_id}/>
-            </div>
-            <div style={{width: '100%'}}>
-            <TaskDescriptionController taskId={taskId} />
-    
-            </div>
-          </Space>
-          <ChatController 
+        <div style={{overflow: 'hidden', height: '100vh', width: '100vw', display: 'flex', flexDirection: 'column'}}>
+          {/* {taskId}
+          {display} */}
+
+
+
+          <div style={{display: 'flex', flex: '70%', padding: '10px', backgroundColor: '#f1f1f1', overflow: 'scroll'}}>
+            <RouteSelector taskId={taskId}/>
+          </div>
+
+          <div style={{display: 'flex', flex: '30%', padding: '10px', backgroundColor: '#ddd'}}>
+
+             <Space direction={'horizontal'}>
+              <div style={{width: '100%'}}>
+                
+                <RouteVotingController taskId={taskId} session_id={session_id} prolific_id={prolific_id}/>
+              </div>
+              <div style={{width: '100%'}}>
+              <TaskDescriptionController taskId={taskId} />
+      
+              </div>
+            </Space>
+
+          </div>
+
+         
+
+         
+          {/* <ChatController 
             roomId={roomData.room_id}
             senderName={senderName}
             prolific_id={prolific_id}
-          />
+          /> */}
       </div>
       
     
