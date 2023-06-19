@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, send_file
 from flask_socketio import SocketIO, join_room, leave_room, send, emit
 from flask import g
 from http import HTTPStatus
@@ -18,7 +18,8 @@ from data_loaders import *
 from flask_cors import CORS
 import time
 import sys
-
+from io import StringIO
+from PIL import Image
 
 # configure the application
     
@@ -110,6 +111,19 @@ def get_maps(task_id, route_id):
     loaded_map = load_map(task_id, route_id)
 
     return loaded_map, HTTPStatus.OK
+
+@app.route('/task/features/<task_id>/<route_id>', methods=['GET'])
+def get_features(task_id, route_id):
+    """
+    Return the features corrsponding to this route.
+    """
+    img_path = os.path.join(DATA_FOLDER_PATH, 'features', f'task_{task_id}_route_{route_id}.png')
+
+    return send_file(img_path, mimetype='image/png')
+
+
+    # return send_file(img_path, mimetype='image/png')
+
 
 
 @app.route('/task/route_count/<task_id>', methods=['GET'])

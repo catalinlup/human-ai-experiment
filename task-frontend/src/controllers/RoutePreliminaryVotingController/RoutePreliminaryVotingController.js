@@ -19,7 +19,7 @@ const RoutePreliminaryVotingController = ({taskId, session_id, prolific_id}) => 
                 vote({session_id: session_id, voted_route_number: voted_route_number, prolific_id: prolific_id})
                 setAlreadyVoted(true)
             }}
-            routeCount={9}
+            routeCount={5}
             alreadyVoted={alreadyVoted}
             buttonText={'Cast preliminary vote'}
             recommendedRoute={0}
