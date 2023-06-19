@@ -4,38 +4,42 @@ import RouteVotingController from "../RouteVotingController/RouteVotingControlle
 import TaskDescriptionController from "../TaskDescriptionController/TaskDescriptionController"
 import ChatController from "../ChatController/ChatController"
 import { useGetSessionQuery } from "../../store/task_backend/sessionApi"
+import { useGetNicknameQuery } from "../../store/task_backend/userApi"
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner"
 
-const SessionController = ({userId}) => {
+const SessionController = ({session_id, prolific_id, roomData, taskId}) => {
 
-    const {data, isLoading} = useGetSessionQuery(userId)
+    const {data, isLoading} = useGetNicknameQuery(session_id)
 
     if (isLoading) {
-        return <></>
+        return <LoadingSpinner />
     }
 
-    console.log('Session data', data)
 
-    const batchId = data['batch_id']
-    const taskIds = data['task_ids']
     const senderName = data['user_name']
+
+    const display = roomData.user_session_ids.map(id => <div>{id}</div>)
 
     return (
         <>
         <div style={{overflow: 'hidden', height: '100vh', width: '100vw'}}>
-          <RouteSelector taskId={33}/>
+          {taskId}
+          {display}
+          <RouteSelector taskId={taskId}/>
           <Space direction={'horizontal'}>
             <div style={{width: '100%'}}>
               
-              <RouteVotingController taskId={taskIds[0]}/>
+              <RouteVotingController taskId={taskId} session_id={session_id} prolific_id={prolific_id}/>
             </div>
             <div style={{width: '100%'}}>
-            <TaskDescriptionController taskId={taskIds[0]} />
+            <TaskDescriptionController taskId={taskId} />
     
             </div>
           </Space>
           <ChatController 
-            roomId={`${batchId}-${taskIds[0]}`}
+            roomId={roomData.room_id}
             senderName={senderName}
+            prolific_id={prolific_id}
           />
       </div>
       

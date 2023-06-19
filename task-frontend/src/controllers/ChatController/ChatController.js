@@ -4,9 +4,9 @@ import { io } from "socket.io-client";
 import { useGetMessagesQuery, useSendMessageMutation } from "../../store/task_backend/chatApi";
 
 
-const ChatController = ({roomId, senderName}) => {
+const ChatController = ({roomId, senderName, prolific_id}) => {
 
-    const {data: msgs, isLoading: isMsgLoading} = useGetMessagesQuery(roomId, {pollingInterval: 100})
+    const {data: msgs, isLoading: isMsgLoading} = useGetMessagesQuery(roomId, {pollingInterval: 1000})
     const [sendMessage] = useSendMessageMutation()
 
     const messages = (isMsgLoading || !msgs)? [] : msgs['messages']
@@ -18,7 +18,7 @@ const ChatController = ({roomId, senderName}) => {
     return <>
         <ChatPopup 
             sender={senderName}
-            messages={sortedMsgs} onSendMessage={(msg) => {sendMessage({roomId: roomId, message: msg})}}
+            messages={sortedMsgs} onSendMessage={(msg) => {sendMessage({roomId: roomId, message: {...msg, prolific_id}})}}
             unreadMsgCount={3}
       />
     </>

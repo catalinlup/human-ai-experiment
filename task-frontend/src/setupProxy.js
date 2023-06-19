@@ -33,6 +33,31 @@ module.exports = function(app) {
     })
   );
 
+  app.use(
+    "/room/*",
+    createProxyMiddleware({
+      target: "http://localhost:9098",
+      changeOrigin: true
+    })
+  );
+
+
+  app.use(
+    "/user/*",
+    createProxyMiddleware({
+      target: "http://localhost:9098",
+      changeOrigin: true
+    })
+  );
+
+  app.use(
+    "/vote/*",
+    createProxyMiddleware({
+      target: "http://localhost:9098",
+      changeOrigin: true
+    })
+  );
+
 
   app.use(
     "/socket.io/*",

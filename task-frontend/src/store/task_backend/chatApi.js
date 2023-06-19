@@ -12,7 +12,7 @@ export const chatApi = createApi({
                     url: `/send/${content.roomId}`,
                     method: 'POST',
                     body: {
-                        "message": content.message
+                        "message": content.message,
                     }
                 }
             },

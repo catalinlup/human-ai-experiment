@@ -15,97 +15,48 @@ import RouteVotingArea from './components/RouteVotingArea/RouteVotingArea';
 import RouteVotingController from './controllers/RouteVotingController/RouteVotingController';
 import ChatController from './controllers/ChatController/ChatController';
 import SessionController from './controllers/SessionController/SessionController';
+import { useGetSessionQuery } from './store/task_backend/sessionApi';
+import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner';
+import RoomStateController from './controllers/RoomStateController/RoomStateController';
 
 function App() {
 
-
-  // const messages = [
-  //   {
-  //     sender: 'John Doe',
-  //     message: 'Hello, how are you?',
-  //     timestamp: 'May 28, 2023 10:30 AM',
-  //     messageSent: true,
-  //   },
-  //   {
-  //     sender: 'Jane Smith',
-  //     message: "I'm doing well, thanks!",
-  //     timestamp: 'May 28, 2023 10:35 AM',
-  //     messageSent: false,
-  //   },
-  //   {
-  //     sender: 'Jane Smith',
-  //     message: "I'm doing well, thanks!",
-  //     timestamp: 'May 28, 2023 10:35 AM',
-  //     messageSent: false,
-  //   },
-  //   {
-  //     sender: 'Jane Smith',
-  //     message: "I'm doing well, thanks!",
-  //     timestamp: 'May 28, 2023 10:35 AM',
-  //     messageSent: false,
-  //   },
-  //   {
-  //     sender: 'Jane Smith',
-  //     message: "I'm doing well, thanks!",
-  //     timestamp: 'May 28, 2023 10:35 AM',
-  //     messageSent: false,
-  //   },
-  //   {
-  //     sender: 'Jane Smith',
-  //     message: "I'm doing well, thanks!",
-  //     timestamp: 'May 28, 2023 10:35 AM',
-  //     messageSent: false,
-  //   },
-  //   {
-  //     sender: 'Jane Smith',
-  //     message: "I'm doing well, thanks!",
-  //     timestamp: 'May 28, 2023 10:35 AM',
-  //     messageSent: false,
-  //   },
-  //   {
-  //     sender: 'Jane Smith',
-  //     message: "I'm doing well, thanks!",
-  //     timestamp: 'May 28, 2023 10:35 AM',
-  //     messageSent: false,
-  //   },
-  //   {
-  //     sender: 'John Doe',
-  //     message: 'Hello, how are you?',
-  //     timestamp: 'May 28, 2023 10:30 AM',
-  //     messageSent: true,
-  //   },
-  //   {
-  //     sender: 'John Doe',
-  //     message: 'Hello, how are you?',
-  //     timestamp: 'May 28, 2023 10:30 AM',
-  //     messageSent: true,
-  //   },
-  //   {
-  //     sender: 'John Doe',
-  //     message: 'Hello, how are you?',
-  //     timestamp: 'May 28, 2023 10:30 AM',
-  //     messageSent: true,
-  //   },
-  //   // Add more messages as needed
-  // ];
-
-  // const [currentMessages, setCurrentMessages] = useState(messages)
+  // const getPathName = () => window.location.pathname.slice(1)
 
 
-  const getPathName = () => window.location.pathname.slice(1)
+  // const getUserId = () => {
+  //   if (['1', '2', '3', '4'].includes(getPathName())) {
+  //     return getPathName()
+  //   }
+  //   return '5'
+  // }
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const prolific_id = urlParams.get('PROLIFIC_ID');
+  const session_id = urlParams.get('SESSION_ID')
 
-  const getUserId = () => {
-    if (['1', '2', '3', '4'].includes(getPathName())) {
-      return getPathName()
-    }
-    return '5'
+  // if (session_id == null || prolific_id == null) {
+
+  // }
+
+  const {data: roomData, isLoading: isRoomDataLoading} = useGetSessionQuery(session_id)
+
+  if (isRoomDataLoading) {
+    return <LoadingSpinner />
   }
 
+  console.log(roomData)
+ 
 
   return (
-    <SessionController userId={getUserId()}/>
-  );
+    <RoomStateController 
+      roomData={roomData}
+      session_id={session_id}
+      prolific_id={prolific_id}
+    />)
+  // return (
+  //   <SessionController userId={getUserId()}/>
+  // );
 }
 
 export default App;

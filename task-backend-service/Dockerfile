@@ -14,4 +14,4 @@ EXPOSE 9098
 
 WORKDIR src
 
-CMD ["sh", "-c", "python main.py"]
+CMD ["sh", "-c", "python main.py 9098"]

@@ -14,4 +14,4 @@ EXPOSE 8080
 
 WORKDIR src
 
-CMD ["sh", "-c", "python main.py"]
+CMD ["sh", "-c", "python main.py 8080"]

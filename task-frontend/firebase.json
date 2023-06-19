@@ -1,0 +1,74 @@
+{
+  "hosting": {
+    "public": "build",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "trailingSlash": false,
+    "rewrites": [
+      {
+        "regex": "/auth(/.*)?",
+        "run": {
+          "serviceId": "task-backend-service",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "regex": "/task(/.*)?",
+        "run": {
+          "serviceId": "task-backend-service",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "regex": "/chat(/.*)?",
+        "run": {
+          "serviceId": "task-backend-service",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "regex": "/session(/.*)?",
+        "run": {
+          "serviceId": "task-backend-service",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "regex": "/room(/.*)?",
+        "run": {
+          "serviceId": "task-backend-service",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "regex": "/user(/.*)?",
+        "run": {
+          "serviceId": "task-backend-service",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "regex": "/vote(/.*)?",
+        "run": {
+          "serviceId": "task-backend-service",
+          "region": "europe-west1"
+        }
+      },
+      {
+        "source": "!/@(auth|task|chat|session|room|user|vote)/**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "emulators": {
+    "hosting": {
+      "port": 5000
+    },
+    "ui": {
+      "enabled": true
+    }
+  }
+}
