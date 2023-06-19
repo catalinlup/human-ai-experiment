@@ -86,7 +86,19 @@ def get_votes_by_room_and_task(client: firestore.Client, room_id: str, task_id: 
     """
 
     votes_collection = client.collection(VOTE_COLLECTION)
-    votes = list(votes_collection.where('room_id', '==', room_id).where('task_id', '==', task_id).stream())
+    votes = list(votes_collection.where('room_id', '==', room_id).where('task_id', '==', int(task_id)).stream())
+    votes = [v.to_dict() for v in votes]
+    votes = [Vote.create_from_json(v) for v in votes]
+
+    return votes
+
+
+def get_preliminary_votes_by_room_and_task(client: firestore.Client, room_id: str, task_id: str) -> List[Vote]:
+    """
+    Return the list of cast preliminary votes for the specified room and task.
+    """
+    votes_collection = client.collection(PRELIMNARY_VOTE_COLLECTION)
+    votes = list(votes_collection.where('room_id', '==', room_id).where('task_id', '==', int(task_id)).stream())
     votes = [v.to_dict() for v in votes]
     votes = [Vote.create_from_json(v) for v in votes]
 

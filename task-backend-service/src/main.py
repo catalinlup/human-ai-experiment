@@ -251,6 +251,90 @@ def get_user_nickname_for_room(session_id):
     return jsonify({'user_name': POSSIBLE_NICKNAMES[username_index]}), HTTPStatus.OK
 
 
+
+
+@app.route('/vote/preliminary_done/<room_id>/<task_id>', methods=['GET'])
+def is_preliminary_done(room_id, task_id):
+    """
+    Checks if the preliminary stage of voting is done.
+    """
+
+    task_id = int(task_id)
+
+    
+
+    existing_votes = get_preliminary_votes_by_room_and_task(g.database_client, room_id, task_id)
+    existing_votes_session_ids = list(set([v.session_id for v in existing_votes]))
+
+    logging.getLogger().warning(existing_votes_session_ids)
+
+
+    preliminary_done = (len(existing_votes_session_ids) >= NUM_ROOM_USERS)
+
+    return jsonify({'preliminary_done': preliminary_done}), HTTPStatus.OK
+
+
+
+
+@app.route('/vote/preliminary', methods=['POST'])
+def post_preliminary_vote():
+    """
+    Posts a preliminary vote
+    """
+
+    body = request.json
+    session_id = str(body['session_id'])
+    prolific_id = str(body['prolific_id'])
+    voted_route_number = body['voted_route_number']
+
+    room: Room = get_room_by_session_id(g.database_client, session_id)
+
+
+    if room is None:
+        raise Exception('The user has not been asigned to a room')
+    
+    room_id = room.room_id
+    room_status: RoomEvent = get_room_last_event(g.database_client, room_id)
+
+    logging.getLogger().warning(room_status.event_type)
+    # logging.getLogger().warning(room_status)
+
+    if room_status.event_type == RoomEventType.ENDED:
+        raise Exception('Room has already ended')
+    
+    if room_status.event_type == RoomEventType.CREATED:
+        raise Exception('Room has not started yet')
+
+
+    task_id_index = get_task_id_by_room_event(room_status)
+    task_id = room.task_ids[task_id_index]
+
+    # retrieve the list of all pre-existing voting objects for this task
+    existing_votes = get_preliminary_votes_by_room_and_task(g.database_client, room_id, task_id)
+
+    num_existing_votes = len(existing_votes) + 1
+
+    # create a voting object
+    vote = Vote(room_id, session_id, task_id, voted_route_number, time.time(), prolific_id)
+
+    # do not allow the same vote twice per task
+
+    existing_votes_session_ids = list(set([v.session_id for v in existing_votes]))
+
+    logging.getLogger().warning('Existing prelims', existing_votes_session_ids)
+
+    if session_id in existing_votes_session_ids:
+        raise Exception('Already voted for this task')
+
+    # save the vorting object
+    add_preliminary_vote(g.database_client, vote)
+
+    logging.getLogger().warning(num_existing_votes)
+
+
+    return vote.to_json(), HTTPStatus.OK
+
+
 @app.route('/vote/perform', methods=['POST'])
 def post_vote():
     
@@ -278,7 +362,8 @@ def post_vote():
         raise Exception('Room has not started yet')
 
 
-    task_id = get_task_id_by_room_event(room_status)
+    task_id_index = get_task_id_by_room_event(room_status)
+    task_id = room.task_ids[task_id_index]
 
     # retrieve the list of all pre-existing voting objects for this task
     existing_votes = get_votes_by_room_and_task(g.database_client, room_id, task_id)
@@ -290,7 +375,7 @@ def post_vote():
 
     # do not allow the same vote twice per task
 
-    existing_votes_session_ids = [v.session_id for v in existing_votes]
+    existing_votes_session_ids = list(set([v.session_id for v in existing_votes]))
 
     if session_id in existing_votes_session_ids:
         raise Exception('Already voted for this task')
@@ -303,10 +388,10 @@ def post_vote():
     # if all votes were cast, end the task
     if num_existing_votes >= NUM_ROOM_USERS:
         logging.getLogger().warning('Adding room event')
-        room_event = RoomEvent(get_uuid(), room_id, RoomEventType.TASK_FINISHED, time.time(), task_id)
+        room_event = RoomEvent(get_uuid(), room_id, RoomEventType.TASK_FINISHED, time.time(), task_id_index)
         add_room_event(g.database_client, room_event)
 
-        if task_id >= NUM_TASKS_PER_ROOM - 1:
+        if task_id_index >= NUM_TASKS_PER_ROOM - 1:
             room_event2 = RoomEvent(get_uuid(), room_id, RoomEventType.ENDED, time.time())
             add_room_event(g.database_client, room_event2)
     

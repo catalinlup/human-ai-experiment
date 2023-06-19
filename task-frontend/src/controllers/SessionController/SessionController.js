@@ -6,6 +6,7 @@ import ChatController from "../ChatController/ChatController"
 import { useGetSessionQuery } from "../../store/task_backend/sessionApi"
 import { useGetNicknameQuery } from "../../store/task_backend/userApi"
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner"
+import VoteSwitchingController from "../VoteSwitchingController/VoteSwitchingController"
 
 const SessionController = ({session_id, prolific_id, roomData, taskId}) => {
 
@@ -37,7 +38,8 @@ const SessionController = ({session_id, prolific_id, roomData, taskId}) => {
              <Space direction={'horizontal'}>
               <div style={{width: '100%'}}>
                 
-                <RouteVotingController taskId={taskId} session_id={session_id} prolific_id={prolific_id}/>
+                {/* <RouteVotingController taskId={taskId} session_id={session_id} prolific_id={prolific_id}/> */}
+                <VoteSwitchingController taskId={taskId} session_id={session_id} prolific_id={prolific_id} room_id={roomData.room_id}/>
               </div>
               <div style={{width: '100%'}}>
               <TaskDescriptionController taskId={taskId} />
@@ -50,11 +52,11 @@ const SessionController = ({session_id, prolific_id, roomData, taskId}) => {
          
 
          
-          {/* <ChatController 
+          <ChatController 
             roomId={roomData.room_id}
             senderName={senderName}
             prolific_id={prolific_id}
-          /> */}
+          />
       </div>
       
     

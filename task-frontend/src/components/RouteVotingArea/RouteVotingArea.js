@@ -6,7 +6,7 @@ const { Paragraph, Text } = Typography;
 
 
 
-const RouteVotingArea = ({onVoteSubmitted, routeCount, recommendedRoute, alreadyVoted=false, showRecommendation=true}) => {
+const RouteVotingArea = ({onVoteSubmitted, routeCount, recommendedRoute, alreadyVoted=false, showRecommendation=true, buttonText='Vote'}) => {
 
     const [selectedRoute, setSelectedRoute] = useState(0)
     const [api, contextHolder] = notification.useNotification();
@@ -39,7 +39,7 @@ const RouteVotingArea = ({onVoteSubmitted, routeCount, recommendedRoute, already
 
                 }}
             >
-                    Vote
+                    {buttonText}
             </Button>
             <Divider />
             <div style={{textAlign: 'center'}}>

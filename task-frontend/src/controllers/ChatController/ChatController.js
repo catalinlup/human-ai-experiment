@@ -19,7 +19,7 @@ const ChatController = ({roomId, senderName, prolific_id}) => {
         <ChatPopup 
             sender={senderName}
             messages={sortedMsgs} onSendMessage={(msg) => {sendMessage({roomId: roomId, message: {...msg, prolific_id}})}}
-            unreadMsgCount={3}
+            unreadMsgCount={1}
       />
     </>
 }

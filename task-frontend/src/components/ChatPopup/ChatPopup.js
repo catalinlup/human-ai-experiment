@@ -11,7 +11,7 @@ import {MessageOutlined} from '@ant-design/icons'
 
 const ChatPopup = ({messages, onSendMessage, sender, unreadMsgCount=0}) => {
     
-    const [chatOpen, setChatOpen] = useState(false)
+    const [chatOpen, setChatOpen] = useState(true)
 
    
     return(

@@ -47,6 +47,12 @@ def add_vote(client: firestore.Client, vote: Vote) -> Vote:
 
     return vote
 
+def add_preliminary_vote(client: firestore.Client, vote: Vote) -> Vote:
+    vote_collection = client.collection(PRELIMNARY_VOTE_COLLECTION)
+    vote_collection.add(vote.to_json())
+
+    return vote
+
 def add_room_event(client: firestore.Client, room_event: RoomEvent) -> RoomEvent:
     """
     Adds a room event to the database
