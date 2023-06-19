@@ -6,7 +6,7 @@ const { Paragraph, Text } = Typography;
 
 
 
-const RouteVotingArea = ({onVoteSubmitted, routeCount, recommendedRoute, alreadyVoted=false, showRecommendation=true, buttonText='Vote'}) => {
+const RouteVotingArea = ({onVoteSubmitted, routeCount, recommendedRoute, alreadyVoted=false, showRecommendation=true, buttonText='Vote', timerSecondsLeft=0}) => {
 
     const [selectedRoute, setSelectedRoute] = useState(0)
     const [api, contextHolder] = notification.useNotification();
@@ -19,7 +19,7 @@ const RouteVotingArea = ({onVoteSubmitted, routeCount, recommendedRoute, already
     return (
         <>
          {contextHolder}
-        <Card className="sticky-title" title="Route Voting" style={{ height: '300px', overflow: 'auto' }}>
+        <Card className="sticky-title" title="Route Voting" extra={`${timerSecondsLeft}s left`} style={{ height: '300px', overflow: 'auto' }}>
             <Select
                 disabled={alreadyVoted}
                 value={selectedRoute}

@@ -1,6 +1,33 @@
+import { useState } from "react";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { useGetRoomStatusQuery } from "../../store/task_backend/sessionApi";
 import SessionController from "../SessionController/SessionController";
+import { useTimer } from 'react-timer-hook';
+import {Button} from 'antd'
+
+
+
+
+const LobbyLoadingScreen = () => {
+
+    const [showRedirect, setShowRedirect] = useState(false)
+
+    const time = new Date()
+    time.setSeconds(time.getSeconds() + 10)
+    const {} = useTimer({expiryTimestamp: time, onExpire: () => {setShowRedirect(true)}})
+
+
+    return <div style={{textAlign: 'center', marginTop: 40, fontSize: 24}}>
+            Waiting for other crowdworkers to join...
+            <LoadingSpinner />
+            
+            {showRedirect&&
+                <Button href={`http://www.google.com`} type='link' style={{marginTop: 20, fontSize: 18}}>
+                    Click to join individually
+                </Button>
+            }
+        </div>
+}
 
 const RoomStateController = ({roomData, session_id, prolific_id}) => {
 
@@ -15,10 +42,7 @@ const RoomStateController = ({roomData, session_id, prolific_id}) => {
     // alert(roomStatus.event_type)
 
     if (roomStatus.event_type === 'room_created') {
-        return <div style={{textAlign: 'center', marginTop: 40, fontSize: 24}}>
-            Waiting for other crowdworkers to join...
-            <LoadingSpinner />
-        </div>
+        return <LobbyLoadingScreen />
     }
 
     if (roomStatus.event_type === 'room_ended') {
