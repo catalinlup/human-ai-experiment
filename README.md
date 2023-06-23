@@ -1,4 +1,4 @@
-# Human AI Experiment - Group
+# Human AI Experiment - Group 1
 Project built to conduct a crowd computing experiment involving the study of human-ai interaction.
 
 
