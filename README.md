@@ -76,6 +76,7 @@ When designing our software system (application) we aimed for simplicity both in
 From an implementation perspective, the time we had available was very limited. In addition to that, due to our limited budget that only allowed for 1 single crowdsourcing experiment, it was very important for our application not to contain any bugs. Since we also had limited time for testing, aiming for a simple application design that would reduce the risk of bugs was the only viable option. As a result of this, we followed a simple client-server architecture for our system, as shown in Figure 1.
 
 ![Figure 1](/imgs/backend_arch.png)
+
 **Figure 1**
 
 Our backend was implemented in Flask and used Firestore as a database. Our API was structured in multiple groups, each group corresponding to a certain functionality, such as live chat, vote registration, retrieving information about a task, room management, etc. The backend followed the model-view-controller architectural pattern, which is the standard for simple applications. One interesting feature of our backend is the timeout system. Since our task required all 3 crowdworkers to participate, one of the crowdworkers quitting or going AFK had the potential to ruin our experiment. Thus, to mitigate for such situations, we decided to implement a timeout system using a periodic background process that would analyze the user activity in every room. 
