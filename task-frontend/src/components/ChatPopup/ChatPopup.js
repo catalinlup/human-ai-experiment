@@ -22,7 +22,7 @@ const ChatPopup = ({messages, onSendMessage, sender, unreadMsgCount=0}) => {
             <PopupWindow
                 open={chatOpen}
                 onClose={() => {setChatOpen(false)}}
-                title={`Chat`}
+                title={`Chat - ${sender}`}
             >
                 <ChatArea messages={messages} sender={sender} onSendMessage={onSendMessage}/>
             </PopupWindow>

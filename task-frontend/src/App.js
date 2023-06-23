@@ -32,8 +32,9 @@ function App() {
   // }
 
   const urlParams = new URLSearchParams(window.location.search);
-  const prolific_id = urlParams.get('PROLIFIC_ID');
+  const prolific_id = urlParams.get('PROLIFIC_PID');
   const session_id = urlParams.get('SESSION_ID')
+  const study_id = urlParams.get('STUDY_ID')
 
   // if (session_id == null || prolific_id == null) {
 
@@ -45,18 +46,14 @@ function App() {
     return <LoadingSpinner />
   }
 
-  console.log(roomData)
- 
-
+  // console.log(roomData)
   return (
     <RoomStateController 
       roomData={roomData}
       session_id={session_id}
       prolific_id={prolific_id}
+      study_id={study_id}
     />)
-  // return (
-  //   <SessionController userId={getUserId()}/>
-  // );
 }
 
 export default App;

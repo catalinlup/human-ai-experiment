@@ -1,6 +1,6 @@
 import { useState } from "react"
 import './RouteVotingArea.css'
-import { Button, Card, Divider, Select, Typography, notification } from 'antd';
+import { Button, Card, Divider, Select, Slider, Typography, notification } from 'antd';
 
 const { Paragraph, Text } = Typography;
 
@@ -9,6 +9,7 @@ const { Paragraph, Text } = Typography;
 const RouteVotingArea = ({onVoteSubmitted, routeCount, recommendedRoute, alreadyVoted=false, showRecommendation=true, buttonText='Vote', timerSecondsLeft=0}) => {
 
     const [selectedRoute, setSelectedRoute] = useState(0)
+    const [confidence, setConfidence] = useState(3)
     const [api, contextHolder] = notification.useNotification();
 
     const routeOptions = []
@@ -27,15 +28,16 @@ const RouteVotingArea = ({onVoteSubmitted, routeCount, recommendedRoute, already
                 options={routeOptions}
                 onChange={(r) => setSelectedRoute(r)}
             />
-            <Divider />
+            {/* <Divider /> */}
+            <Slider min={0} max={3} marks={{0: 'Unsure', 3: 'Sure'}} step={1} value={confidence} onChange={(newConfidence => setConfidence(newConfidence))}/>
             <Button 
                 disabled={alreadyVoted} 
                 size={'lg'} 
                 style={{width: '100%'}} 
                 type="primary"
                 onClick={() => {
-                    onVoteSubmitted(selectedRoute)
-                    api.success({'description': `Vote registered! Voted for Route ${selectedRoute}.`})
+                    onVoteSubmitted(selectedRoute, confidence)
+                    api.success({'description': `Vote registered! Voted for Route ${selectedRoute}. Please wait for the others in the room to cast their vote!`})
 
                 }}
             >

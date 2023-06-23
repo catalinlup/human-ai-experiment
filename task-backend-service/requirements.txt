@@ -10,3 +10,4 @@ flask-socketio
 simple-websocket
 flask-cors
 Pillow
+Flask-APScheduler

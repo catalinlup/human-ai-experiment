@@ -20,13 +20,22 @@ import time
 import sys
 from io import StringIO
 from PIL import Image
-
+from flask_apscheduler import APScheduler
 # configure the application
+
+class Config:
+    SCHEDULER_API_ENABLED = True
     
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
+app.config.from_object(Config())
 CORS(app,resources={r"/*":{"origins":"*"}})
 socketio = SocketIO(app,cors_allowed_origins="*")
+
+
+scheduler = APScheduler()
+scheduler.init_app(app)
+scheduler.start()
 
 
 # configure the database client
@@ -150,18 +159,18 @@ def get_description(task_id):
 def get_ai_route(task_id):
 
     if task_id == '30':
-        return jsonify({'route': 1}), HTTPStatus.OK
+        return jsonify({'route': 4}), HTTPStatus.OK
     
     if task_id == '31':
-        return jsonify({'route': 5}), HTTPStatus.OK
+        return jsonify({'route': 1}), HTTPStatus.OK
     
     if task_id == '32':
-        return jsonify({'route': 0}), HTTPStatus.OK
+        return jsonify({'route': 2}), HTTPStatus.OK
     
     if task_id == '33':
         return jsonify({'route': 2}), HTTPStatus.OK
     
-    return jsonify({'route': 4}), HTTPStatus.OK
+    return jsonify({'route': 3}), HTTPStatus.OK
 
 
 
@@ -234,6 +243,7 @@ def get_room(session_id):
 
         else:
             # fetch the first available room and add the user to it
+            available_rooms = sorted(available_rooms, lambda r: len(r.user_session_ids))
             fetched_room = available_rooms[0]
             room_obj = add_user_to_room(g.database_client, fetched_room.room_id, session_id)
 
@@ -274,9 +284,6 @@ def is_preliminary_done(room_id, task_id):
     """
 
     task_id = int(task_id)
-
-    
-
     existing_votes = get_preliminary_votes_by_room_and_task(g.database_client, room_id, task_id)
     existing_votes_session_ids = list(set([v.session_id for v in existing_votes]))
 
@@ -300,6 +307,7 @@ def post_preliminary_vote():
     session_id = str(body['session_id'])
     prolific_id = str(body['prolific_id'])
     voted_route_number = body['voted_route_number']
+    confidence = int(body['confidence'])
 
     room: Room = get_room_by_session_id(g.database_client, session_id)
 
@@ -329,7 +337,7 @@ def post_preliminary_vote():
     num_existing_votes = len(existing_votes) + 1
 
     # create a voting object
-    vote = Vote(room_id, session_id, task_id, voted_route_number, time.time(), prolific_id)
+    vote = Vote(room_id, session_id, task_id, voted_route_number, time.time(), prolific_id, confidence)
 
     # do not allow the same vote twice per task
 
@@ -356,6 +364,7 @@ def post_vote():
     session_id = str(body['session_id'])
     prolific_id = str(body['prolific_id'])
     voted_route_number = body['voted_route_number']
+    confidence = int(body['confidence'])
 
     room: Room = get_room_by_session_id(g.database_client, session_id)
 
@@ -385,7 +394,7 @@ def post_vote():
     num_existing_votes = len(existing_votes) + 1
 
     # create a voting object
-    vote = Vote(room_id, session_id, task_id, voted_route_number, time.time(), prolific_id)
+    vote = Vote(room_id, session_id, task_id, voted_route_number, time.time(), prolific_id, confidence)
 
     # do not allow the same vote twice per task
 
@@ -499,6 +508,51 @@ def post_vote():
 
 
 ## END CHAT ENDPOINTS CONFIGURATION
+
+
+# Scheduler
+@scheduler.task('interval', id='task_expiration', seconds=30, misfire_grace_time=900)
+def task_expiration():
+    with scheduler.app.app_context():
+        logging.getLogger().warning('Scheduler started')
+        client = app.config['database_client']
+
+        rooms: List[Room] = get_all_rooms(client)
+
+        for room in rooms:
+            room_id = room.room_id
+            room_status: RoomEvent = get_room_last_event(client, room_id)
+
+            # a task is not currently being processed, so nothing to timeout
+            if room_status.event_type == RoomEventType.CREATED or room_status.event_type == RoomEventType.ENDED:
+                continue
+                
+            
+            # the task is not long enough to be timeouted
+            if time.time() - room_status.timestamp < INACTIVITY_TIMEOUT:
+                continue
+            
+
+            room_event2 = RoomEvent(get_uuid(), room_id, RoomEventType.ENDED, time.time())
+            add_room_event(client, room_event2)
+
+            # task_id_index = get_task_id_by_room_event(room_status)
+
+            # # new task_index
+            # if task_id_index >= NUM_TASKS_PER_ROOM - 1:
+            #     room_event2 = RoomEvent(get_uuid(), room_id, RoomEventType.ENDED, time.time())
+            #     add_room_event(client, room_event2)
+
+            # else:
+            #     room_event = RoomEvent(get_uuid(), room_id, RoomEventType.TASK_FINISHED, time.time(), task_id_index)
+            #     add_room_event(client, room_event)
+
+            
+
+
+
+        
+
 
 @app.errorhandler(BadRequest)
 def handle_bad_request_error(e):

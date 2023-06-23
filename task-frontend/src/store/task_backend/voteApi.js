@@ -14,7 +14,8 @@ export const voteApi = createApi({
                     body: {
                         "session_id": content.session_id,
                         "voted_route_number": content.voted_route_number,
-                        "prolific_id": content.prolific_id
+                        "prolific_id": content.prolific_id,
+                        "confidence": content.confidence
                     }
                 }
             },
@@ -29,7 +30,8 @@ export const voteApi = createApi({
                     body: {
                         "session_id": content.session_id,
                         "voted_route_number": content.voted_route_number,
-                        "prolific_id": content.prolific_id
+                        "prolific_id": content.prolific_id,
+                        "confidence": content.confidence
                     }
                 }
             },

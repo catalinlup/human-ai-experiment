@@ -103,7 +103,18 @@ def get_preliminary_votes_by_room_and_task(client: firestore.Client, room_id: st
     votes = [Vote.create_from_json(v) for v in votes]
 
     return votes
-    
+
+
+def get_all_rooms(client: firestore.Client) -> List[Room]:
+    """
+    Return all the rooms from the database
+    """
+    room_collection = client.collection(ROOM_COLLECTION)
+    room_collection_stream = room_collection.stream()
+    room_dicts = [r.to_dict() for r in room_collection_stream]
+    rooms = [Room.create_from_json(r) for r in room_dicts]
+
+    return rooms
 
 
 def get_available_rooms(client: firestore.Client) -> List[Room]:

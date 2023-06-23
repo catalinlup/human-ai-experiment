@@ -7,16 +7,16 @@ import { useGetAiRouteQuery } from "../../store/task_backend/taskApi";
 import { useTimer } from 'react-timer-hook';
 
 
-const RouteVotingController = ({taskId, session_id, prolific_id, timer=300}) => {
+const RouteVotingController = ({taskId, session_id, prolific_id, timer=120}) => {
 
     const {data, isLoading} = useGetAiRouteQuery(taskId)
     const [vote] = useVoteMutation()
     const [alreadyVoted, setAlreadyVoted] = useState(false)
 
 
-    const submitVote = (voted_route_number) => {
+    const submitVote = (voted_route_number, confidence=0) => {
         // return;
-        vote({session_id: session_id, voted_route_number: voted_route_number, prolific_id: prolific_id})
+        vote({session_id: session_id, voted_route_number: voted_route_number, prolific_id: prolific_id, confidence: confidence})
         setAlreadyVoted(true)
     }
 
@@ -24,7 +24,7 @@ const RouteVotingController = ({taskId, session_id, prolific_id, timer=300}) => 
     // setup timer
     const time = new Date()
     time.setSeconds(time.getSeconds() + timer)
-    const {totalSeconds, restart} = useTimer({expiryTimestamp: time, onExpire: () => {submitVote(-1)}})
+    const {totalSeconds, restart} = useTimer({expiryTimestamp: time, onExpire: () => {submitVote(-1, 0)}})
 
     useEffect(() => {
         setAlreadyVoted(false)
@@ -39,8 +39,8 @@ const RouteVotingController = ({taskId, session_id, prolific_id, timer=300}) => 
 
     return (
         <RouteVotingArea 
-            onVoteSubmitted={(voted_route_number) => {
-                submitVote(voted_route_number)
+            onVoteSubmitted={(voted_route_number, confidence) => {
+                submitVote(voted_route_number, confidence)
                 // vote({session_id: session_id, voted_route_number: voted_route_number, prolific_id: prolific_id})
                 // setAlreadyVoted(true)
             }}
@@ -48,6 +48,7 @@ const RouteVotingController = ({taskId, session_id, prolific_id, timer=300}) => 
             recommendedRoute={isLoading? null : data.route}
             alreadyVoted={alreadyVoted}
             timerSecondsLeft={totalSeconds}
+            buttonText={'Enter final answer'}
           />
     )
 }

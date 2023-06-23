@@ -29,7 +29,10 @@ const SessionController = ({session_id, prolific_id, roomData, taskId}) => {
 
 
 
+
           <div style={{display: 'flex', flex: '70%', padding: '10px', backgroundColor: '#f1f1f1', overflow: 'scroll'}}>
+          <p style={{'marginLeft': '10px'}}>Task {taskId - 30 + 1} / 4</p>
+
             <RouteSelector taskId={taskId}/>
           </div>
 

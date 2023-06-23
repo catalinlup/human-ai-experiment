@@ -24,7 +24,7 @@ const RouteSelector = ({taskId}) => {
     const mapOptions = []
     for (let i = 0; i < count; i++) {
         mapOptions.push(<>
-            <Space direction={'horizontal'} style={{width: '100%'}}>
+            <Space direction={'horizontal'} style={{width: '100%', display: 'flex', }}>
                 <Space direction={'vertical'} style={{textAlign: 'center'}}>
                     <DynamicMap taskId={taskId} routeId={i}/>
 

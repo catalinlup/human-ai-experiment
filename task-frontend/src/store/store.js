@@ -5,7 +5,7 @@ import { taskApi } from "./task_backend/taskApi";
 import { chatApi } from "./task_backend/chatApi";
 import { sessionApi } from "./task_backend/sessionApi";
 import { voteApi } from "./task_backend/voteApi";
-import { userApi } from './task_backend/userApi'
+import { userApi } from './task_backend/userApi';
 
 
 const store = configureStore({
